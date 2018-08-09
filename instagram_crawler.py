@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 
+import re
 import json
 
 import os
@@ -26,7 +27,7 @@ login_url = "https://www.instagram.com/accounts/login/"
 test_url = "https://www.instagram.com/mca4thfloor/"
 
 phantomjs_path = "/home/ftatp/platform_tools/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
-chrome_path = "/home/ftatp/platform_tools/chromedriver"
+chrome_path = "/home/ftatp/tools_platforms/chromedriver"
 #browser = webdriver.PhantomJS(phantomjs_path)
 browser = webdriver.Chrome(chrome_path)
 browser.implicitly_wait(3)
@@ -133,18 +134,20 @@ for url in urls:
 		picture = {
 			'path': "",
 			'caption': "",
-		#	'tag_list': [],
-			'like_list': [],
-			'num_of_like': 0,
+			'tag_list': [],
 			'num_of_comments': 0,
 			'location': "",
-			'date_time': ""
+			'date_time': "",
+			'like_list': [],
+			'num_of_like': 0
 		}
 
+		path = ""
+		caption = ""
 		tag_list = []
-		like_list = []
 		comment_num = 0
-		
+		like_list = []
+	
 		img_src_div = img_div.find_element_by_class_name("KL4Bh")
 		img_tag = img_src_div.find_element_by_tag_name("img")
 
@@ -152,74 +155,86 @@ for url in urls:
 		req = Request(url=img_link, headers=headers)
 		img = urlopen(req).read()
 
+		# picture path
 		picture_path = user_path + "/picture" + str(i) + ".jpg"
 		with open(picture_path, mode='wb') as f:
 			f.write(img)
-			picture['path'] = user['id'] + "/picture" + str(i) + ".jpg"
+			path = user['id'] + "/picture" + str(i) + ".jpg"
 			print("Saved...")
 
+		picture['path'] = path
+
+		# picture specific data
 		img_div.click()
 		WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("M9sTE"))
 
 		article_tag = browser.find_element_by_class_name("M9sTE")
 		captiondiv = article_tag.find_element_by_class_name("eo2As")
+		text_ul_tag = captiondiv.find_element_by_tag_name("ul")
 
-		text_ul_tag = captiondiv.find_element_by_class_name("Xl2Pu")
 
+		# caption, tag, comment_num
 		li_tags = text_ul_tag.find_elements_by_tag_name("li")
+		commenter_user_is_owner = True
 		for li_tag in li_tags:	
-			tag_flag = False
-			caption_flag = False
 			try:
 				text_board_a_tag = li_tag.find_element_by_tag_name("a")
-				if text_board_a_tag.get_attribute("title") != user['id']:
-					# li tag is a comment
-					# TODO: get all comments(if needed)
-					comment_num += 1
-				elif caption_flag == False or tag_flag == False:
+				if text_board_a_tag.get_attribute("title") == user['id'] and commenter_user_is_owner == True:
 					# li tag is a caption or tag
 					text_board_span_tag = li_tag.find_element_by_tag_name("span")
-					print("Text: ", text_board_span_tag.get_attribute("innerHTML"))
-					
+					# print("Text: ", text_board_span_tag.get_attribute("innerHTML"))
+					caption += text_board_span_tag.text
+					# get tags
 					tags = text_board_span_tag.find_elements_by_tag_name("a")
-					if len(tags) == 0:
-						if caption_flag == False:
-							#li tag is a the caption
-							caption_flag = True
-							picture['caption'] = text_board_span_tag.get_attribute("innerHTML")
-					else:
-						if tag_flag == False:
-							tag_flag = True
-							# li tag is the tag
-							for tag in tags:
-								tag_list.append(tag.get_attribute("innerHTML"))
+					for tag in tags:
+						# print("Tag: ", tag.text)
+						tag_list.append(tag.text)
+						try:
+							erase_pattern = re.compile(tag.text)
+							caption = re.sub(erase_pattern, '', caption)
+							#caption += ' '
+						except Exception as e:
+							print(e)
 
-			except: # Not possible
+
+				elif text_board_a_tag.get_attribute("title") != user['id']:
+					# li tag is a comment
+					# TODO: get all comments(if needed)
+					commenter_user_is_owner = False
+					comment_num += 1
+				else:
+					continue
+
+			except Exception as e: # Not possible
 				print("No <a> tag in this <li> tag")
-				pass
+				print(e)
 
-		picture['num_of_comments'] = comment_num
+		picture['caption'] = caption
 		picture['tag_list'] = tag_list
+		print("Tags: ", tag_list)
+		picture['num_of_comments'] = comment_num
+
 		# location
 		try:
 			ownerdiv = article_tag.find_element_by_class_name("Ppjfr")
 			locationdiv = ownerdiv.find_element_by_class_name("M30cS")
 			location_tag = locationdiv.find_element_by_class_name("O4GlU")
-			picture['location'] = location_tag.text
+			location = location_tag.text
 		except:
-			picture['location'] = ""
+			location = ""
 
+		picture['location'] = location
 
 		# Date time
 		time_tag = captiondiv.find_element_by_tag_name("time")
 		date_time = time_tag.get_attribute("title")
 		picture['date_time'] = date_time
 
-		# Like list
+		# Like list, num
 		like_list = []	
 		try:
 			like_span_tag = captiondiv.find_element_by_class_name("zV_Nj")
-			picture['num_of_like'] = int(like_span_tag.text.split(' ')[0])
+			num_of_like = int(like_span_tag.text.split(' ')[0])
 			# click like button and get like user list
 			like_span_tag.click()
 			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("wwxN2"))
@@ -230,7 +245,8 @@ for url in urls:
 
 		except:
 			print("Only view numbers")
-		
+
+		picture['num_of_like'] = num_of_like
 		picture['like_list'] = like_list
 
 
