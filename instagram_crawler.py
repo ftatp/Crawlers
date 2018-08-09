@@ -46,7 +46,6 @@ browser.get(login_url)
 
 login_div = browser.find_element_by_class_name("gr27e ")
 elems = login_div.find_elements_by_class_name("_2hvTZ")
-print(len(elems))
 elems[0].send_keys(login_info['m_id'])
 elems[1].send_keys(login_info['m_passwd'])
 
@@ -201,7 +200,22 @@ for url in urls:
 
 		picture['num_of_comments'] = comment_num
 		picture['tag_list'] = tag_list
+		# location
+		try:
+			ownerdiv = article_tag.find_element_by_class_name("Ppjfr")
+			locationdiv = ownerdiv.find_element_by_class_name("M30cS")
+			location_tag = locationdiv.find_element_by_class_name("O4GlU")
+			picture['location'] = location_tag.text
+		except:
+			picture['location'] = ""
 
+
+		# Date time
+		time_tag = captiondiv.find_element_by_tag_name("time")
+		date_time = time_tag.get_attribute("title")
+		picture['date_time'] = date_time
+
+		# Like list
 		like_list = []	
 		try:
 			like_span_tag = captiondiv.find_element_by_class_name("zV_Nj")
@@ -219,21 +233,8 @@ for url in urls:
 		
 		picture['like_list'] = like_list
 
-		# location
-		try:
-			ownerdiv = article_tag.find_element_by_class_name("Ppjfr")
-			locationdiv = ownerdiv.find_element_by_class_name("M30cS")
-			location_tag = locationdiv.find_element_by_class_name("O4GlU")
-			picture['location'] = location_tag.text
-		except:
-			picture['location'] = ""
 
-
-		# Date time
-		time_tag = captiondiv.find_element_by_tag_name("time")
-		date_time = time_tag.get_attribute("title")
-		picture['date_time'] = date_time
-
+		# data construction done
 		print("Pic: ", picture)
 
 		picture_list.append(picture)

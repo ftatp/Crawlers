@@ -2,4 +2,5 @@
 *.pdf
 *.jpg
 *.png
+*.json
 sample_crawler/
