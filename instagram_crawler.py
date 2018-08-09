@@ -211,7 +211,6 @@ for url in urls:
 
 		picture['caption'] = caption
 		picture['tag_list'] = tag_list
-		print("Tags: ", tag_list)
 		picture['num_of_comments'] = comment_num
 
 		# location
@@ -233,18 +232,34 @@ for url in urls:
 		# Like list, num
 		like_list = []	
 		try:
+			# click like list button and get like user list
 			like_span_tag = captiondiv.find_element_by_class_name("zV_Nj")
 			num_of_like = int(like_span_tag.text.split(' ')[0])
-			# click like button and get like user list
 			like_span_tag.click()
-			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("wwxN2"))
+			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("_1xe_U"))
+			like_list_div = browser.find_element_by_class_name("wwxN2")
+			like_users = browser.find_elements_by_class_name("FPmhX")
+			for like_user in like_users:
+				like_list.append(like_user.text)
+				if like_user == like_users[len(like_users) - 1]:
+					# Scroll down like list
+					like_list_div.send_keys(Keys.PAGE_DOWN)
+					time.sleep(1)
+					new_like_users = browser.find_elements_by_class_name("FPmhX")
+					
+					idx = 0
+					for new_like_user in new_like_users:
+						if new_like_user == like_user:
+							break
+						idx += 1
 
-			like_users = find_elements_by_class_name("FPmhX")
+					like_users += new_like_users[idx + 1:]
 
-			like_list = [ like_user.text for like_user in like_users ]
+			# like_list = [ like_user.text for like_user in like_users ]
 
-		except:
-			print("Only view numbers")
+		except Exception as e:
+			print(e)
+			print("or Only view numbers")
 
 		picture['num_of_like'] = num_of_like
 		picture['like_list'] = like_list
