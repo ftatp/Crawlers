@@ -15,6 +15,8 @@ import json
 import os
 import time
 
+from lxml import etree, html
+
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
 
 urls = [
@@ -27,7 +29,7 @@ login_url = "https://www.instagram.com/accounts/login/"
 test_url = "https://www.instagram.com/mca4thfloor/"
 
 phantomjs_path = "/home/ftatp/platform_tools/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
-chrome_path = "/home/ftatp/tools_platforms/chromedriver"
+chrome_path = "/home/ftatp/platform_tools/chromedriver"
 #browser = webdriver.PhantomJS(phantomjs_path)
 browser = webdriver.Chrome(chrome_path)
 browser.implicitly_wait(3)
@@ -237,25 +239,44 @@ for url in urls:
 			num_of_like = int(like_span_tag.text.split(' ')[0])
 			like_span_tag.click()
 			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("_1xe_U"))
+			browser.save_screenshot('like click.png')
+			time.sleep(2)
+			browser.save_screenshot('after 2sec.png')
+			
 			like_list_div = browser.find_element_by_class_name("wwxN2")
 			like_users = browser.find_elements_by_class_name("FPmhX")
-			for like_user in like_users:
-				like_list.append(like_user.text)
-				if like_user == like_users[len(like_users) - 1]:
-					# Scroll down like list
-					like_list_div.send_keys(Keys.PAGE_DOWN)
-					time.sleep(1)
-					new_like_users = browser.find_elements_by_class_name("FPmhX")
-					
-					idx = 0
-					for new_like_user in new_like_users:
-						if new_like_user == like_user:
-							break
-						idx += 1
 
-					like_users += new_like_users[idx + 1:]
+			while True:
+				like_list_div.send_keys(Keys.PAGE_DOWN)
+				time.sleep(1)
+				new_like_users = browser.find_elements_by_class_name("FPmhX")
+				if like_users == new_like_users:
+					break
+				else:
+					like_users = new_like_users
 
-			# like_list = [ like_user.text for like_user in like_users ]
+
+			document_root = html.fromstring(like_list_div.get_attribute("innerHTML"))
+			
+			print(etree.tostring(document_root, encoding='unicode', pretty_print=True))
+
+#			for like_user in like_users:
+#				like_list.append(like_user.text)
+#				if like_user == like_users[len(like_users) - 1]:
+#					# Scroll down like list
+#					like_list_div.send_keys(Keys.PAGE_DOWN)
+#					time.sleep(1)
+#					new_like_users = browser.find_elements_by_class_name("FPmhX")
+#					
+#					idx = 0
+#					for new_like_user in new_like_users:
+#						if new_like_user == like_user:
+#							break
+#						idx += 1
+#
+#					like_users += new_like_users[idx + 1:]
+
+			like_list = [ like_user.text for like_user in like_users ]
 
 		except Exception as e:
 			print(e)
