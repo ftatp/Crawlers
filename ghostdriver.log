@@ -1,0 +1,98 @@
+[INFO  - 2018-08-10T11:25:14.509Z] GhostDriver - Main - running on port 53935
+[INFO  - 2018-08-10T11:25:14.746Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2018-08-10T11:25:14.746Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.customHeaders:  - {}
+[INFO  - 2018-08-10T11:25:14.746Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2018-08-10T11:25:14.746Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 0d510f80-9c90-11e8-a54e-7995c8f5afd6
+[ERROR - 2018-08-10T11:25:20.390Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:20.390Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/Polyfills.js/41e2c4c6d956.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:20.670Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:20.670Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/Vendor.js/355286c503f9.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.329Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.329Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/en_US.js/e1ced3229e05.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.475Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.475Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/ConsumerCommons.js/59536f0dc72d.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.480Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:21.480Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/Consumer.js/a0b088320b12.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:22.258Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900322256
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:22.874Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - msg: ReferenceError: Can't find variable: __d
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:22.875Z] Session [0d510f80-9c90-11e8-a54e-7995c8f5afd6] - page.onError - stack:
+  global code (https://www.instagram.com/static/bundles/metro/FeedPageContainer.js/9cdd6a5418e2.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:25.927Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900325875
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:29.589Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900329544
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:33.220Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900333170
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:36.888Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900336839
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:40.556Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900340506
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:44.185Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900344172
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:47.830Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900347793
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:51.433Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900351412
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:55.061Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900355013
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:25:58.676Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900358644
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:02.329Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900362292
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:05.959Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900365914
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:09.590Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900369542
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:13.258Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900373206
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:16.878Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900376840
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-08-10T11:26:20.540Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1533900380492
+
+  phantomjs://platform/console++.js:263 in error

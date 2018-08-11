@@ -19,24 +19,31 @@ from lxml import etree, html
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
 
-urls = [
-	"https://www.instagram.com/mca4thfloor/",
-	"https://www.instagram.com/sage.k_/"
-]
+urls = []
+with open('users', 'r') as userfp:
+	line = userfp.readline()
+	while line:
+		urls.append(line)
+		line = userfp.readline()
 
 
 login_url = "https://www.instagram.com/accounts/login/"
-test_url = "https://www.instagram.com/mca4thfloor/"
+test_url = "mca4thfloor/"
+
+test_urls = [
+	test_url
+]
 
 phantomjs_path = "/home/ftatp/platform_tools/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
 chrome_path = "/home/ftatp/platform_tools/chromedriver"
 #browser = webdriver.PhantomJS(phantomjs_path)
 browser = webdriver.Chrome(chrome_path)
+browser.set_window_size(1280, 1000)
 browser.implicitly_wait(3)
 
 
-USER = "ftatp5901@gmail.com"
-PASS = "egoism1950"
+USER = "ftatp5901@gmail.com"	#"jeonyoungs@gmail.com"
+PASS = "egoism1950" #"jyshci1!!!"
 
 session = requests.session()
 
@@ -60,7 +67,9 @@ WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name
 print("Login Done")
 
 for url in urls:
-	browser.get(url)
+	browser.get("https://www.instagram.com/" + url)
+
+	WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("coreSpriteDesktopNavLogoAndWordmark"))
 
 	browser.save_screenshot("clickupdate.png")
 
@@ -73,8 +82,8 @@ for url in urls:
 	user = {
 		'id': "",
 		'num_of_followers': 0,
-		'num_of_followings': 0
-	#	'picture_list": 
+		'num_of_followings': 0,
+		'picture_list': []
 	}
 
 	body = browser.find_element_by_tag_name("body")
@@ -102,13 +111,11 @@ for url in urls:
 		li_text = a_tag.text
 		li_text_split = li_text.split(' ')
 		if li_text_split[1] == "followers":
-			user['num_of_followers'] = int(li_text_split[0])
+			user['num_of_followers'] = int(li_text_split[0].replace(',', ''))
 
 		if li_text_split[1] == "following":
-			user['num_of_following'] = int(li_text_split[0])
-		
-	print("User: ", user)
-
+			user['num_of_followings'] = int(li_text_split[0])
+	
 
 	# get picture panel
 	browser.find_element_by_class_name("_2z6nI")
@@ -170,50 +177,55 @@ for url in urls:
 		img_div.click()
 		WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("M9sTE"))
 
-		article_tag = browser.find_element_by_class_name("M9sTE")
-		captiondiv = article_tag.find_element_by_class_name("eo2As")
-		text_ul_tag = captiondiv.find_element_by_tag_name("ul")
+		try:
+			article_tag = browser.find_element_by_class_name("M9sTE")
+			captiondiv = article_tag.find_element_by_class_name("eo2As")
+			text_ul_tag = captiondiv.find_element_by_tag_name("ul")
 
 
-		# caption, tag, comment_num
-		li_tags = text_ul_tag.find_elements_by_tag_name("li")
-		commenter_user_is_owner = True
-		for li_tag in li_tags:	
-			try:
-				text_board_a_tag = li_tag.find_element_by_tag_name("a")
-				if text_board_a_tag.get_attribute("title") == user['id'] and commenter_user_is_owner == True:
-					# li tag is a caption or tag
-					text_board_span_tag = li_tag.find_element_by_tag_name("span")
-					# print("Text: ", text_board_span_tag.get_attribute("innerHTML"))
-					caption += text_board_span_tag.text
-					# get tags
-					tags = text_board_span_tag.find_elements_by_tag_name("a")
-					for tag in tags:
-						# print("Tag: ", tag.text)
-						tag_list.append(tag.text)
-						try:
-							erase_pattern = re.compile(tag.text)
-							caption = re.sub(erase_pattern, '', caption)
-							#caption += ' '
-						except Exception as e:
-							print(e)
+			# caption, tag, comment_num
+			li_tags = text_ul_tag.find_elements_by_tag_name("li")
+			commenter_user_is_owner = True
+			for li_tag in li_tags:	
+				try:
+					text_board_a_tag = li_tag.find_element_by_tag_name("a")
+					if text_board_a_tag.get_attribute("title") == user['id'] and commenter_user_is_owner == True:
+						# li tag is a caption or tag
+						text_board_span_tag = li_tag.find_element_by_tag_name("span")
+						# print("Text: ", text_board_span_tag.get_attribute("innerHTML"))
+						caption += text_board_span_tag.text
+						# get tags
+						tags = text_board_span_tag.find_elements_by_tag_name("a")
+						for tag in tags:
+							# print("Tag: ", tag.text)
+							tag_list.append(tag.text)
+							try:
+								erase_pattern = re.compile(tag.text)
+								caption = re.sub(erase_pattern, '', caption)
+								#caption += ' '
+							except Exception as e:
+								print(e)
 
 
-				elif text_board_a_tag.get_attribute("title") != user['id']:
-					# li tag is a comment
-					# TODO: get all comments(if needed)
-					commenter_user_is_owner = False
-					comment_num += 1
-				else:
-					continue
+					elif text_board_a_tag.get_attribute("title") != user['id']:
+						# li tag is a comment
+						# TODO: get all comments(if needed)
+						commenter_user_is_owner = False
+						comment_num += 1
+					else:
+						continue
 
-			except Exception as e: # Not possible
-				print("No <a> tag in this <li> tag")
-				print(e)
+				except Exception as e: # Not possible
+					print("No <a> tag in this <li> tag")
+					print(e)
 
-		picture['caption'] = caption
-		picture['tag_list'] = tag_list
-		picture['num_of_comments'] = comment_num
+			picture['caption'] = caption
+			picture['tag_list'] = tag_list
+			picture['num_of_comments'] = comment_num
+
+		except Exception as e:
+			print(e)
+			pass
 
 		# location
 		try:
@@ -237,28 +249,28 @@ for url in urls:
 			# click like list button and get like user list
 			like_span_tag = captiondiv.find_element_by_class_name("zV_Nj")
 			num_of_like = int(like_span_tag.text.split(' ')[0])
-			like_span_tag.click()
-			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("_1xe_U"))
-			browser.save_screenshot('like click.png')
-			time.sleep(2)
-			browser.save_screenshot('after 2sec.png')
+#			like_span_tag.click()
+#			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("wwxN2"))
+#			browser.save_screenshot('like click.png')
+
+#			like_list_div = browser.find_element_by_class_name("_1xe_U")
 			
-			like_list_div = browser.find_element_by_class_name("wwxN2")
-			like_users = browser.find_elements_by_class_name("FPmhX")
+#			document_root = html.fromstring(like_list_div.get_attribute("innerHTML"))			
+#			print(etree.tostring(document_root, encoding='unicode', pretty_print=True))
+#
+#			like_users = browser.find_elements_by_class_name("FPmhX")
 
-			while True:
-				like_list_div.send_keys(Keys.PAGE_DOWN)
-				time.sleep(1)
-				new_like_users = browser.find_elements_by_class_name("FPmhX")
-				if like_users == new_like_users:
-					break
-				else:
-					like_users = new_like_users
+#			while True:
+#				like_list_div.send_keys(Keys.PAGE_DOWN)
+#				time.sleep(1)
+#				new_like_users = browser.find_elements_by_class_name("FPmhX")
+#				print(new_like_users[12].text)
+#				browser.save_screenshot('after 2sec.png')
+#				if like_users == new_like_users:
+#					break
+#				else:
+#					like_users = new_like_users
 
-
-			document_root = html.fromstring(like_list_div.get_attribute("innerHTML"))
-			
-			print(etree.tostring(document_root, encoding='unicode', pretty_print=True))
 
 #			for like_user in like_users:
 #				like_list.append(like_user.text)
@@ -276,7 +288,7 @@ for url in urls:
 #
 #					like_users += new_like_users[idx + 1:]
 
-			like_list = [ like_user.text for like_user in like_users ]
+#			like_list = [ like_user.text for like_user in like_users ]
 
 		except Exception as e:
 			print(e)
@@ -287,8 +299,6 @@ for url in urls:
 
 
 		# data construction done
-		print("Pic: ", picture)
-
 		picture_list.append(picture)
 
 		# click x span
@@ -310,10 +320,6 @@ for url in urls:
 
 			img_divs += new_img_divs[idx + 1:]
 
-		picture_list.append(picture)
-
-
-
 	user['picture_list'] = picture_list
 
 	print(user)
@@ -321,7 +327,5 @@ for url in urls:
 	# build json
 	with open(user['id'] + "/data.json", 'w') as fp:
 		json.dump(user, fp)
-
-
 
 
