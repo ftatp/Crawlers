@@ -35,7 +35,8 @@ browser.implicitly_wait(3)
 
 test_urls = ["ftatp5901/"]
 urls =[
- 'ftatp5901',
+#'ftatp5901',
+	'wuswus458',
  ]
 
 
@@ -105,7 +106,7 @@ for url in urls:
 	img_divs = article.find_elements_by_class_name("eLAPa")
 
 	for img_div in img_divs:
-		if i > 300:
+		if i > 299:
 			break
 
 		# list of items
@@ -141,38 +142,43 @@ for url in urls:
 
 		###########################################################
 		#######    Get like number
+		
+		print("\n")
+		
 		try:
-			print("\n")
 			like_tag = captiondiv.find_element_by_class_name("Nm9Fw")
 			like_span_tag = like_tag.find_element_by_tag_name("span")
 			num_of_like = like_span_tag.get_attribute("innerHTML")
-			print("num of like: " + num_of_like)
 
 		except:
-			print("Video")
+			try:
+				view_tag = captiondiv.find_element_by_class_name("HbPOm")
 
-			# click x span
-			close_button = browser.find_element_by_class_name("ckWGn")
-			close_button.click()
-			############################################################
-			#######    Scroll down and repeat
-			if img_div == img_divs[len(img_divs) - 1]:
-				##print("Scroll down\n\n")
-				body.send_keys(Keys.PAGE_DOWN)
-				time.sleep(1)
-				new_img_divs = picture_panel.find_elements_by_class_name("eLAPa")
+				print("Video")
 
-				idx = 0
-				for new_img_div in new_img_divs:
-					if new_img_div == img_div:
-						break
-					idx += 1
+				# click x span
+				close_button = browser.find_element_by_class_name("ckWGn")
+				close_button.click()
+				############################################################
+				#######    Scroll down and repeat
+				if img_div == img_divs[len(img_divs) - 1]:
+					##print("Scroll down\n\n")
+					body.send_keys(Keys.PAGE_DOWN)
+					time.sleep(1)
+					new_img_divs = picture_panel.find_elements_by_class_name("eLAPa")
 
-				img_divs += new_img_divs[idx + 1:]
+					idx = 0
+					for new_img_div in new_img_divs:
+						if new_img_div == img_div:
+							break
+						idx += 1
 
+					img_divs += new_img_divs[idx + 1:]
 
+				continue
 
-			continue
+			except:
+				num_of_like = 0
 
 		#Like list, num
 		picture['num_of_like'] = num_of_like
@@ -335,7 +341,6 @@ for url in urls:
 #login_url = "https://www.instagram.com/accounts/login/"
 #
 #USER = "ftatp5901@gmail.com"
-#PASS = "egoism1950"
 #
 #session = requests.session()
 #
