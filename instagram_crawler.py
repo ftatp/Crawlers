@@ -1,3 +1,13 @@
+##############################################################################
+###                                                                        ###
+###	 Made by ftatp                                                         ###								 
+###      March 14th, 2019                                                  ###
+###	 Update history:                                                       ###
+###	  Oct 7th, 2019: Update instagram meta-data                            ###
+###	 
+#############################################################################
+
+
 import urllib.request
 import urllib.parse
 import requests
@@ -22,7 +32,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML
 ubuntu_delimiter = "/"
 win_delimiter = "\\"
 
-delimiter = win_delimiter
+delimiter = ubuntu_delimiter
 
 phantomjs_path = "/home/ftatp/platform_tools/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
 chrome_path = "/home/ftatp/platform_tools/chromedriver"
@@ -35,9 +45,7 @@ browser.implicitly_wait(3)
 
 test_urls = ["ftatp5901/"]
 urls =[
-#'ftatp5901',
-	'wuswus458',
- ]
+]
 
 
 for url in urls:
@@ -135,7 +143,11 @@ for url in urls:
 		like_list = []
 
 		img_div.click()
-		WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("M9sTE"))
+
+		try:
+			WebDriverWait(browser, timeout=500).until(lambda x: x.find_element_by_class_name("M9sTE"))
+		except:
+			continue
 
 		article_tag = browser.find_element_by_class_name("M9sTE")
 		captiondiv = article_tag.find_element_by_class_name("eo2As")
